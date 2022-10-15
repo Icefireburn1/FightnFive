@@ -15,4 +15,11 @@ public class Enemy : Character
     {
         
     }
+
+    public void SetAttributes(int attack, int health, int speed)
+    {
+        Attack = attack;
+        Health = health;
+        Speed = speed;
+    }
 }

@@ -4,11 +4,17 @@ using UnityEngine;
 
 public abstract class Character : MonoBehaviour, Fightable
 {
+    [SerializeField]
     private int attack;
+    [SerializeField]
     private int health;
+    [SerializeField]
     private int speed;
+    [SerializeField]
     private Ability ability1;
+    [SerializeField]
     private Ability ability2;
+    [SerializeField]
     private Ability ability3;
     private bool isActive;
     private StatusEffect statusEffect;
