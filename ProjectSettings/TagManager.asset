@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - Marker
+  - Canvas
+  - Healthbar
   layers:
   - Default
   - TransparentFX

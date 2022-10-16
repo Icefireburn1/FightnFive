@@ -21,6 +21,12 @@ public class Hero : Character
     // Update is called once per frame
     void Update()
     {
-        
+        base.CustomUpdate();
+    }
+
+    public void HealToFull()
+    {
+        Health = MaxHealth;
+        IsAlive = true;
     }
 }

@@ -7,6 +7,8 @@ using Unity.Collections;
 using UnityEngine.UI;
 using System.Linq;
 using TMPro;
+using UnityEngine.EventSystems;
+using Random = System.Random;
 
 /// <summary>
 /// This object controls everything that happens in the Battle scene.
@@ -28,6 +30,9 @@ public class BattleManager : MonoBehaviour
     public Button btnAbility2;
     public Button btnAbility3;
 
+    public Ability selectedAbility;
+    public Ability.EligibleTarget eligibleTarget;
+
     public GameObject enemy1;
     public GameObject enemy2;
     public GameObject enemy3;
@@ -38,10 +43,15 @@ public class BattleManager : MonoBehaviour
     public GameObject rogue;
     public GameObject jerry;
 
+    public List<GameObject> selectedUnits;
+
     [SerializeField]
     public TurnOrder turnOrder;
 
-    private bool beginBattle = false;
+    public bool beginBattle = false;
+    public bool isPlayersTurn = false;
+
+    public GameObject HpPrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -52,8 +62,9 @@ public class BattleManager : MonoBehaviour
             SpawnEnemies();
             SpawnPlayers();
             CreateTurnOrder();
+            CreateHealthBars();
             PopulateAbilityButtons();
-            beginBattle = true;
+            EndInit();
         }
         catch (UnauthorizedAccessException e)
         {
@@ -62,18 +73,273 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    void EndInit()
+    {
+        beginBattle = true;
+        selectedAbility = null;
+        gameObject.GetComponent<DoubleClick>().doubleClicked += new EventHandler(HandleDoubleClick);
+    }
+
+    void HandleDoubleClick(object sender, EventArgs e)
+    {
+        // Don't do anything when its not our turn
+        if (!isPlayersTurn) return;
+
+        if (selectedAbility == null)
+        {
+            Debug.Log("No ability selected");
+            return;
+        }
+        if (selectedUnits.Count <= 0)
+        {
+            Debug.Log("No unit is selected");
+            return;
+        }
+        
+        foreach(GameObject go in selectedUnits)
+        {
+            go.GetComponent<Character>().ApplyAbilityToSelf(selectedAbility);
+        }
+        ClearAllMarkers();
+        selectedAbility = null;
+        FinishCurrentPlayerCharacterTurn();
+    }
+
+    void FinishCurrentPlayerCharacterTurn()
+    {
+        CleanUpDeadAssets();
+        selectedUnits = new();
+        GameObject nowMovingGO = turnOrder.DoNext();
+        isPlayersTurn = nowMovingGO.GetComponent<Character>().IsPlayer;
+    }
+
+    void FinishCurrentAICharacterTurn()
+    {
+        CleanUpDeadAssets();
+        GameObject nowMovingGO = turnOrder.DoNext();
+        isPlayersTurn = nowMovingGO.GetComponent<Character>().IsPlayer;
+    }
+
+    void CleanUpDeadAssets()
+    {
+        foreach(GameObject go in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            if (go.GetComponent<Character>().Health <= 0)
+            {
+                go.GetComponent<SpriteRenderer>().enabled = false;
+                go.GetComponent<BoxCollider2D>().enabled = false;
+                turnOrder.RemoveFromTurnOrder(go);
+            }
+        }
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if (go.GetComponent<Character>().Health <= 0)
+            {
+                go.GetComponent<SpriteRenderer>().enabled = false;
+                go.GetComponent<BoxCollider2D>().enabled = false;
+                turnOrder.RemoveFromTurnOrder(go);
+            }
+        }
+        foreach(GameObject go in GameObject.FindGameObjectsWithTag("Healthbar"))
+        {
+            go.GetComponent<HealthBar>().DoUpdateFillAmount(); // We want up-to-date information...Update doesn't happen fast enough
+            if (go.GetComponent<HealthBar>().GetImageFilledComponent().fillAmount <= 0)
+            {
+                Destroy(go);
+            }
+        }
+    }
+
+    private void CreateHealthBars()
+    {
+        try
+        {
+            foreach (GameObject go in turnOrder.GetAllUnits())
+            {
+                GameObject hp = HpPrefab;
+                hp.name = "HPBar " + go.name;
+                Character tempChar = go.GetComponent<Character>();
+                hp.GetComponent<HealthBar>().character = tempChar;
+
+                GameObject created = Instantiate(hp, tempChar.HealthBarPosition, hp.transform.rotation);
+                created.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e);
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (beginBattle)
         {
+            DoBattleEnd(CheckForVictoryOrDefeat());
+            if (isPlayersTurn)
+            {
+                PopulateAbilityButtons();
+                CheckForNewTarget();
+                // Other logic is automatically handled by double click method
+            }
+            // AI is moving
+            else
+            {
+                // TODO: can make this "smarter"
+                GameObject movingAI = turnOrder.GetMoving();
+                GameObject targetPlayerCharacter = GetRandomAlivePlayerCharacter();
+                // This is null when no players are left standing
+                if (targetPlayerCharacter == null)
+                {
+                    return;
+                }
 
+                targetPlayerCharacter.GetComponent<Character>().ApplyAbilityToSelf(movingAI.GetComponent<Character>().Ability1); // do attack
+                FinishCurrentAICharacterTurn();
+            }
+        }
+    }
+
+    void DoBattleEnd(int result)
+    {
+        switch (result)
+        {
+            case 1:
+                SceneManager.LoadScene(3); // Victory
+                break;
+            case -1:
+                SceneManager.LoadScene(4); // Defeat
+                break;
+            default:
+                return;
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns>-1 = defeat, 0 = neither, 1 = victory</returns>
+    private int CheckForVictoryOrDefeat()
+    {
+        bool isVictory = true;
+        bool isDefeat = true;
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            if (go.GetComponent<Character>().Health > 0)
+            {
+                isVictory = false;
+            }
+        }
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if (go.GetComponent<Character>().Health > 0)
+            {
+                isDefeat = false;
+            }
+        }
+
+        if (isDefeat) return -1;
+        if (isVictory) return 1;
+        return 0;
+    }
+
+    GameObject GetRandomAlivePlayerCharacter()
+    {
+        GameObject[] gos = GameObject.FindGameObjectsWithTag("Player");
+
+        List<GameObject> playersAlive = new();
+        foreach(GameObject go in gos)
+        {
+            if (go.GetComponent<Character>().IsAlive)
+            {
+                playersAlive.Add(go);
+            }
+        }
+
+        if (playersAlive.Count <= 0)
+        {
+            return null;
+        }
+
+        Random r = new();
+        return playersAlive.ElementAt(r.Next(playersAlive.Count));
+    }
+
+    void CheckForNewTarget()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+
+        if (hit.collider != null && Input.GetMouseButtonDown(0))
+        {
+            Debug.Log(hit.transform.gameObject.name + " Position: " + hit.collider.gameObject.transform.position);
+            DoMarker(hit.transform);
+        }
+    }
+
+    void DoMarker(Transform selectedTarget)
+    {
+        if (selectedAbility == null)
+            return;
+
+        if (eligibleTarget == Ability.EligibleTarget.OneEnemy && selectedTarget.gameObject.CompareTag("Enemy"))
+        {
+            ClearAllMarkers();
+            selectedTarget.gameObject.GetComponent<Character>().CreateMarker();
+            selectedUnits = new List<GameObject>() { selectedTarget.gameObject };
+
+        }
+        else if (eligibleTarget == Ability.EligibleTarget.AllEnemy && selectedTarget.gameObject.CompareTag("Enemy"))
+        {
+            ClearAllMarkers();
+            GameObject[] gos = GameObject.FindGameObjectsWithTag("Enemy");
+            List<GameObject> tempSelected = new List<GameObject>();
+            foreach(GameObject go in gos)
+            {
+                if (go.GetComponent<Character>().Health > 0)
+                {
+                    go.GetComponent<Character>().CreateMarker();
+                    tempSelected.Add(go);
+                }
+            }
+            selectedUnits = tempSelected;
+        }
+        else if (eligibleTarget == Ability.EligibleTarget.OneAlly && selectedTarget.gameObject.CompareTag("Player"))
+        {
+            ClearAllMarkers();
+            selectedTarget.gameObject.GetComponent<Character>().CreateMarker();
+            selectedUnits = new List<GameObject>() { selectedTarget.gameObject };
+        }
+        else if (eligibleTarget == Ability.EligibleTarget.AllAlly && selectedTarget.gameObject.CompareTag("Player"))
+        {
+            ClearAllMarkers();
+            GameObject[] gos = GameObject.FindGameObjectsWithTag("Player");
+            List<GameObject> tempSelected = new List<GameObject>();
+            foreach (GameObject go in gos)
+            {
+                if (go.GetComponent<Character>().Health > 0)
+                {
+                    go.GetComponent<Character>().CreateMarker();
+                    tempSelected.Add(go);
+                }
+            }
+            selectedUnits = tempSelected;
+        }
+    }
+
+    void ClearAllMarkers()
+    {
+        GameObject[] markers = GameObject.FindGameObjectsWithTag("Marker");
+        foreach(GameObject g in markers)
+        {
+            Destroy(g);
         }
     }
 
     void Init()
     {
         currentFloors = GameManager.CurrentFloor;
+        selectedUnits = new List<GameObject>();
     }
 
     void SpawnPlayers()
@@ -87,6 +353,10 @@ public class BattleManager : MonoBehaviour
                 GameManager.SetPlayerCharacter(GameManager.Heroes.Jerry, jerry);
                 GameManager.SetPlayerCharacter(GameManager.Heroes.Charles, charles);
                 GameManager.SetPlayerCharacter(GameManager.Heroes.Rogue, rogue);
+            }
+            else
+            {
+                GameManager.HealPlayerCharacters();
             }
         }
         catch (NullReferenceException e)
@@ -110,10 +380,11 @@ public class BattleManager : MonoBehaviour
             enemy3 = Instantiate(currentFloors.enemy3, spot3.transform.position, spot3.transform.rotation);
             enemy4 = Instantiate(currentFloors.enemy4, spot4.transform.position, spot4.transform.rotation);
 
-            enemy1.GetComponent<Enemy>().SetAttributes(currentFloors.attack1, currentFloors.health1, currentFloors.speed1);
-            enemy2.GetComponent<Enemy>().SetAttributes(currentFloors.attack2, currentFloors.health2, currentFloors.speed2);
-            enemy3.GetComponent<Enemy>().SetAttributes(currentFloors.attack3, currentFloors.health3, currentFloors.speed3);
-            enemy4.GetComponent<Enemy>().SetAttributes(currentFloors.attack4, currentFloors.health4, currentFloors.speed4);
+            // Using vector3 for hp position is weird/bad...
+            enemy1.GetComponent<Enemy>().SetAttributes(currentFloors.attack1, currentFloors.health1, currentFloors.speed1, new Vector3(-180, 111, 0));
+            enemy2.GetComponent<Enemy>().SetAttributes(currentFloors.attack2, currentFloors.health2, currentFloors.speed2, new Vector3(-60, 111, 0));
+            enemy3.GetComponent<Enemy>().SetAttributes(currentFloors.attack3, currentFloors.health3, currentFloors.speed3, new Vector3(60, 111, 0));
+            enemy4.GetComponent<Enemy>().SetAttributes(currentFloors.attack4, currentFloors.health4, currentFloors.speed4, new Vector3(180, 111, 0));
         }
         catch (NullReferenceException e)
         {
@@ -129,12 +400,38 @@ public class BattleManager : MonoBehaviour
             btnAbility1.GetComponentInChildren<TextMeshProUGUI>().text = firstMovingPlayerCharacter.Ability1.title;
             btnAbility2.GetComponentInChildren<TextMeshProUGUI>().text = firstMovingPlayerCharacter.Ability2.title;
             btnAbility3.GetComponentInChildren<TextMeshProUGUI>().text = firstMovingPlayerCharacter.Ability3.title;
-            
+
+            btnAbility1.onClick.RemoveAllListeners();
+            btnAbility2.onClick.RemoveAllListeners();
+            btnAbility3.onClick.RemoveAllListeners();
+
+            btnAbility1.onClick.AddListener(() => SetActiveAbility(0));
+            btnAbility2.onClick.AddListener(() => SetActiveAbility(1));
+            btnAbility3.onClick.AddListener(() => SetActiveAbility(2));
+
         }
         catch (NullReferenceException e)
         {
             Debug.LogError(e);
         }
+    }
+
+    void SetActiveAbility(int num)
+    {
+        switch (num)
+        {
+            case 0:
+                selectedAbility = turnOrder.GetFirstMovingPlayer().GetComponent<Character>().Ability1;
+                break;
+            case 1:
+                selectedAbility = turnOrder.GetFirstMovingPlayer().GetComponent<Character>().Ability2;
+                break;
+            case 2:
+                selectedAbility = turnOrder.GetFirstMovingPlayer().GetComponent<Character>().Ability3;
+                break;
+        }
+        eligibleTarget = selectedAbility.eligibleTargets;
+        selectedUnits = new(); // Clear targets
     }
 
     void CreateTurnOrder()
@@ -153,10 +450,12 @@ public class BattleManager : MonoBehaviour
             turnOrder.Add(enemy3);
             turnOrder.Add(enemy4);
             turnOrder.SortBySpeed();
+
+            isPlayersTurn = turnOrder.GetMoving().GetComponent<Character>().IsPlayer;
         }
         catch (Exception e)
         {
-            Debug.LogError("Could not find GameObjects with tag 'Player'");
+            Debug.LogError("Could not find GameObjects with tag 'Player'" + e);
         }
     }
 }

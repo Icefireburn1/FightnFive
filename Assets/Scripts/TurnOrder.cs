@@ -32,6 +32,20 @@ public class TurnOrder
         });
     }
 
+    public List<GameObject> GetAllUnits()
+    {
+        return turnOrder;
+    }
+
+    public void RemoveFromTurnOrder(GameObject go)
+    {
+        turnOrder.Remove(go);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns>The character that is moving AFTER the shuffle has happened</returns>
     public GameObject DoNext()
     {
         if (turnOrder.Count <= 0)
@@ -42,7 +56,7 @@ public class TurnOrder
         GameObject temp = turnOrder[0];
         turnOrder.RemoveAt(0);
         turnOrder.Insert(turnOrder.Count, temp);
-        return temp;
+        return turnOrder[0];
     }
 
     public GameObject GetMoving()

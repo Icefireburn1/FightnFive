@@ -33,6 +33,14 @@ public static class GameManager
         CurrentFloorNumber = 3;
     }
 
+    public static void HealPlayerCharacters()
+    {
+        sam.GetComponent<Hero>().HealToFull();
+        charles.GetComponent<Hero>().HealToFull();
+        jerry.GetComponent<Hero>().HealToFull();
+        rogue.GetComponent<Hero>().HealToFull();
+    }
+
     public static GameObject GetPlayerCharacter(Heroes name)
     {
         switch (name)
