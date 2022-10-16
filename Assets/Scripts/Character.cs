@@ -17,7 +17,8 @@ public abstract class Character : MonoBehaviour, Fightable
     [SerializeField]
     private Ability ability3;
     private bool isActive;
-    private StatusEffect statusEffect;
+    private Ability.StatusEffect statusEffect;
+    private bool isPlayer;
 
     public int Attack { get => attack; set => attack = value; }
     public int Health { get => health; set => health = value; }
@@ -26,7 +27,8 @@ public abstract class Character : MonoBehaviour, Fightable
     public Ability Ability2 { get => ability2; set => ability2 = value; }
     public Ability Ability3 { get => ability3; set => ability3 = value; }
     public bool IsActive { get => isActive; set => isActive = value; }
-    public StatusEffect StatusEffect { get => statusEffect; set => statusEffect = value; }
+    public bool IsPlayer { get => isPlayer; set => isPlayer = value; }
+    public Ability.StatusEffect StatusEffect { get => statusEffect; set => statusEffect = value; }
 
     public void UseAbility(Ability ability, Character target)
     {

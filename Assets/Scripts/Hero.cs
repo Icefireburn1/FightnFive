@@ -9,10 +9,12 @@ public class Hero : Character
     // Start is called before the first frame update
     void Start()
     {
+        
     }
 
     private void Awake()
     {
+        IsPlayer = true;
         DontDestroyOnLoad(transform.gameObject);
     }
 

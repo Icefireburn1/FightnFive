@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using Unity.Collections;
 using UnityEngine.UI;
 using System.Linq;
+using TMPro;
 
 /// <summary>
 /// This object controls everything that happens in the Battle scene.
@@ -37,7 +38,10 @@ public class BattleManager : MonoBehaviour
     public GameObject rogue;
     public GameObject jerry;
 
+    [SerializeField]
     public TurnOrder turnOrder;
+
+    private bool beginBattle = false;
 
     // Start is called before the first frame update
     void Start()
@@ -48,8 +52,10 @@ public class BattleManager : MonoBehaviour
             SpawnEnemies();
             SpawnPlayers();
             CreateTurnOrder();
+            PopulateAbilityButtons();
+            beginBattle = true;
         }
-        catch (NullReferenceException e)
+        catch (UnauthorizedAccessException e)
         {
             SceneManager.LoadScene(1);
             Debug.Log("Going to previous screen.");
@@ -59,7 +65,10 @@ public class BattleManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (beginBattle)
+        {
+
+        }
     }
 
     void Init()
@@ -69,33 +78,63 @@ public class BattleManager : MonoBehaviour
 
     void SpawnPlayers()
     {
-        // Only need to check 1 to determine state of all
-        if (GameManager.GetPlayerCharacter(GameManager.Heroes.Sam) == null)
+        try
         {
-            GameManager.SetPlayerCharacter(GameManager.Heroes.Sam, sam);
-            GameManager.SetPlayerCharacter(GameManager.Heroes.Jerry, jerry);
-            GameManager.SetPlayerCharacter(GameManager.Heroes.Charles, charles);
-            GameManager.SetPlayerCharacter(GameManager.Heroes.Rogue, rogue);
+            // Only need to check 1 to determine state of all
+            if (GameManager.GetPlayerCharacter(GameManager.Heroes.Sam) == null)
+            {
+                GameManager.SetPlayerCharacter(GameManager.Heroes.Sam, sam);
+                GameManager.SetPlayerCharacter(GameManager.Heroes.Jerry, jerry);
+                GameManager.SetPlayerCharacter(GameManager.Heroes.Charles, charles);
+                GameManager.SetPlayerCharacter(GameManager.Heroes.Rogue, rogue);
+            }
+        }
+        catch (NullReferenceException e)
+        {
+            Debug.LogError(e);
         }
     }
 
     void SpawnEnemies()
     {
+        // We started in the battle scene
         if (currentFloors == null)
         {
-            Debug.LogError("Couldn't spawn enemeis");
-            throw new NullReferenceException();
+            throw new UnauthorizedAccessException();
         }
 
-        enemy1 = Instantiate(currentFloors.enemy1, spot1.transform.position, spot1.transform.rotation);
-        enemy2 = Instantiate(currentFloors.enemy2, spot2.transform.position, spot2.transform.rotation);
-        enemy3 = Instantiate(currentFloors.enemy3, spot3.transform.position, spot3.transform.rotation);
-        enemy4 = Instantiate(currentFloors.enemy4, spot4.transform.position, spot4.transform.rotation);
+        try
+        {
+            enemy1 = Instantiate(currentFloors.enemy1, spot1.transform.position, spot1.transform.rotation);
+            enemy2 = Instantiate(currentFloors.enemy2, spot2.transform.position, spot2.transform.rotation);
+            enemy3 = Instantiate(currentFloors.enemy3, spot3.transform.position, spot3.transform.rotation);
+            enemy4 = Instantiate(currentFloors.enemy4, spot4.transform.position, spot4.transform.rotation);
 
-        enemy1.GetComponent<Enemy>().SetAttributes(currentFloors.attack1, currentFloors.health1, currentFloors.speed1);
-        enemy2.GetComponent<Enemy>().SetAttributes(currentFloors.attack2, currentFloors.health2, currentFloors.speed2);
-        enemy3.GetComponent<Enemy>().SetAttributes(currentFloors.attack3, currentFloors.health3, currentFloors.speed3);
-        enemy4.GetComponent<Enemy>().SetAttributes(currentFloors.attack4, currentFloors.health4, currentFloors.speed4);
+            enemy1.GetComponent<Enemy>().SetAttributes(currentFloors.attack1, currentFloors.health1, currentFloors.speed1);
+            enemy2.GetComponent<Enemy>().SetAttributes(currentFloors.attack2, currentFloors.health2, currentFloors.speed2);
+            enemy3.GetComponent<Enemy>().SetAttributes(currentFloors.attack3, currentFloors.health3, currentFloors.speed3);
+            enemy4.GetComponent<Enemy>().SetAttributes(currentFloors.attack4, currentFloors.health4, currentFloors.speed4);
+        }
+        catch (NullReferenceException e)
+        {
+            Debug.LogError(e);
+        }
+    }
+
+    void PopulateAbilityButtons()
+    {
+        try
+        {
+            Character firstMovingPlayerCharacter = turnOrder.GetFirstMovingPlayer().GetComponent<Character>();
+            btnAbility1.GetComponentInChildren<TextMeshProUGUI>().text = firstMovingPlayerCharacter.Ability1.title;
+            btnAbility2.GetComponentInChildren<TextMeshProUGUI>().text = firstMovingPlayerCharacter.Ability2.title;
+            btnAbility3.GetComponentInChildren<TextMeshProUGUI>().text = firstMovingPlayerCharacter.Ability3.title;
+            
+        }
+        catch (NullReferenceException e)
+        {
+            Debug.LogError(e);
+        }
     }
 
     void CreateTurnOrder()
@@ -108,16 +147,17 @@ public class BattleManager : MonoBehaviour
             turnOrder.Add(playerCharacters[1]);
             turnOrder.Add(playerCharacters[2]);
             turnOrder.Add(playerCharacters[3]);
+
+            turnOrder.Add(enemy1);
+            turnOrder.Add(enemy2);
+            turnOrder.Add(enemy3);
+            turnOrder.Add(enemy4);
+            turnOrder.SortBySpeed();
         }
         catch (Exception e)
         {
-            Debug.LogError("Could not GameObjects with tag 'Player'");
+            Debug.LogError("Could not find GameObjects with tag 'Player'");
         }
-        turnOrder.Add(enemy1);
-        turnOrder.Add(enemy2);
-        turnOrder.Add(enemy3);
-        turnOrder.Add(enemy4);
-        turnOrder.SortBySpeed();
     }
 }
 

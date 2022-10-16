@@ -15,8 +15,10 @@ public class Ability : ScriptableObject
 
     public enum EligibleTarget
     {
-        Enemies,
-        Allies
+        OneEnemy,
+        OneAlly,
+        AllEnemy,
+        AllAlly
     }
 
     public enum StatusEffect
