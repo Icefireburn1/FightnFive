@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Helper class that handles double-click functionality. This is useful for
+/// selecting and confirming units to use abilities on.
+/// </summary>
 public class DoubleClick : MonoBehaviour
 {
     private float firstLeftClickTime;
@@ -31,6 +35,10 @@ public class DoubleClick : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Runs when a double-click is found. Other classes can subscribe to this.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator DetectDoubleLeftClick()
     {
         isTimeCheckAllowed = false;

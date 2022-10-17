@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Useful for viewing information while playing within Editor.
+/// Otherwise, this is useless.
+/// </summary>
 public class GameManagerUtil : MonoBehaviour
 {
     public GameObject sam;

@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Easily stores information that can be parsed on game start. This makes creating/loading different
+/// floors very easy.
+/// </summary>
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/FloorScriptable", order = 1)]
 public class Floors : ScriptableObject
 {

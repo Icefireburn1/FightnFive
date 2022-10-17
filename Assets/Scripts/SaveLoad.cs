@@ -4,6 +4,10 @@ using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
+/// <summary>
+/// Manages our save/load system. Saves a file at "safe" location.
+/// For example this saves 'Game.save' at C:\Users\Justin\AppData\LocalLow\DefaultCompany\FightnFive for me.
+/// </summary>
 public static class SaveLoad
 {
     public static void SaveData()

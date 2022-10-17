@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// All battle characters inherit this class. It stores basic information such as
+/// battle stats and battle actions.
+/// </summary>
 public abstract class Character : MonoBehaviour, Fightable
 {
     [SerializeField]
@@ -80,6 +84,9 @@ public abstract class Character : MonoBehaviour, Fightable
         Instantiate(marker, new Vector3(transform.position.x + .022f, transform.position.y + 0.815f), transform.rotation);
     }
 
+    /// <summary>
+    /// Children can inherit this.
+    /// </summary>
     public void CustomUpdate()
     {
         if (health <= 0)

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// This class is responsible for remembering information between scenes.
 /// This allows other components to grab/set up-to-date information.
+/// If a component exists, chances are they are using this object.
 /// </summary>
 public static class GameManager
 {
@@ -28,7 +29,8 @@ public static class GameManager
     }
 
     /// <summary>
-    /// Increment highest game floor and chapter if needed
+    /// Increment highest game floor (and chapter if needed).
+    /// Takes player to game victory screen if past highest chapter.
     /// </summary>
     public static void NextGameFloor()
     {
@@ -43,8 +45,8 @@ public static class GameManager
     static GameManager()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        Chapter = 3;
-        CurrentFloorNumber = 15;
+        Chapter = 1;
+        CurrentFloorNumber = 1;
     }
 
     public static void HealPlayerCharacters()
@@ -100,6 +102,11 @@ public static class GameManager
         }
     }
 
+    /// <summary>
+    /// Set attributes when transitioning scenes.
+    /// </summary>
+    /// <param name="scene">The scene we went to.</param>
+    /// <param name="mode">Extra info.</param>
     static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (sam == null)

@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Used to stop NullReferences when trying to load the game from the mainmenu.
+/// Ideally, this should be fixed(?)
+/// </summary>
 public class CharacterInit : MonoBehaviour
 {
     public GameObject sam;

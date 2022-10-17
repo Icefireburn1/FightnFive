@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// This class is for characters that the player manages. We do NOT destroy these characters
+/// on scene transition.
+/// </summary>
 public class Hero : Character
 {
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     private void Awake()
     {
         IsPlayer = true;

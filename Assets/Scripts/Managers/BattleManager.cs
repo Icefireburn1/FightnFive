@@ -221,7 +221,7 @@ public class BattleManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Check for battle end state
     /// </summary>
     /// <returns>-1 = defeat, 0 = neither, 1 = victory</returns>
     private int CheckForVictoryOrDefeat()
@@ -270,6 +270,9 @@ public class BattleManager : MonoBehaviour
         return playersAlive.ElementAt(r.Next(playersAlive.Count));
     }
 
+    /// <summary>
+    /// Use Raycast to find a selected target
+    /// </summary>
     void CheckForNewTarget()
     {
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
@@ -281,6 +284,11 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Create a marker at the selected target(s).
+    /// This uses context from eligibleTargets when choosing multiples
+    /// </summary>
+    /// <param name="selectedTarget"></param>
     void DoMarker(Transform selectedTarget)
     {
         if (selectedAbility == null)

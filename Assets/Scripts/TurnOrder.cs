@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// When a battle starts, they are placed into a TurnOrder which sorts them by their speed.
+/// This order never moves. Characters can be removed from this TurnOrder when they are defeated.
+/// </summary>
 [System.Serializable]
 public class TurnOrder
 {
@@ -59,6 +63,10 @@ public class TurnOrder
         return turnOrder[0];
     }
 
+    /// <summary>
+    /// Gets the character that is currently moving.
+    /// </summary>
+    /// <returns></returns>
     public GameObject GetMoving()
     {
         if (turnOrder.Count <= 0)
@@ -69,6 +77,10 @@ public class TurnOrder
         return turnOrder[0];
     }
 
+    /// <summary>
+    /// Starting from the beginning of the TurnOrder, find the next character that the player controls.
+    /// </summary>
+    /// <returns></returns>
     public GameObject GetFirstMovingPlayer()
     {
         if (turnOrder.Count <= 0)

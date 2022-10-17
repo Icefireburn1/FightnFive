@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Updates the healthbar for each character depending on their health.
+/// </summary>
 public class HealthBar : MonoBehaviour
 {
     private Image healthBar;
@@ -28,6 +31,11 @@ public class HealthBar : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// We can have multiple children with this component, so we may want to find
+    /// a specific one.
+    /// </summary>
+    /// <returns></returns>
     public Image GetImageFilledComponent()
     {
         Image[] imageComps = GetComponentsInChildren<Image>();
