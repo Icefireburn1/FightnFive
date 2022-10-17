@@ -98,7 +98,7 @@ public class BattleManager : MonoBehaviour
         
         foreach(GameObject go in selectedUnits)
         {
-            go.GetComponent<Character>().ApplyAbilityToSelf(selectedAbility);
+            go.GetComponent<Character>().ApplyAbilityToSelf(selectedAbility, turnOrder.GetMoving().GetComponent<Character>().Attack);
         }
         ClearAllMarkers();
         selectedAbility = null;
@@ -195,7 +195,7 @@ public class BattleManager : MonoBehaviour
                     return;
                 }
 
-                targetPlayerCharacter.GetComponent<Character>().ApplyAbilityToSelf(movingAI.GetComponent<Character>().Ability1); // do attack
+                targetPlayerCharacter.GetComponent<Character>().ApplyAbilityToSelf(movingAI.GetComponent<Character>().Ability1, movingAI.GetComponent<Character>().Attack); // do attack
                 FinishCurrentAICharacterTurn();
             }
         }
@@ -207,6 +207,10 @@ public class BattleManager : MonoBehaviour
         {
             case 1:
                 SceneManager.LoadScene(3); // Victory
+                if (GameManager.CurrentFloorNumber == GameManager.CurrentlyChallengingFloorNumber)
+                {
+                    GameManager.NextGameFloor();
+                }
                 break;
             case -1:
                 SceneManager.LoadScene(4); // Defeat

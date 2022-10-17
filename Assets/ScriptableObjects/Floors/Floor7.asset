@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8037629484abc77449c8364ca73203f7, type: 3}
-  m_Name: Floor5
+  m_Name: Floor7
   m_EditorClassIdentifier: 
   enemy1: {fileID: 4848792969191730150, guid: 04c240fcee770ee4ab07573fc36cbda7, type: 3}
-  health1: 60
+  health1: 80
   attack1: 10
-  speed1: 66
+  speed1: 0
   enemy2: {fileID: 4848792969191730150, guid: 04c240fcee770ee4ab07573fc36cbda7, type: 3}
-  health2: 60
+  health2: 80
   attack2: 10
   speed2: 0
   enemy3: {fileID: 4848792969191730150, guid: 04c240fcee770ee4ab07573fc36cbda7, type: 3}
-  health3: 60
+  health3: 80
   attack3: 10
   speed3: 0
   enemy4: {fileID: 4848792969191730150, guid: 04c240fcee770ee4ab07573fc36cbda7, type: 3}
-  health4: 60
+  health4: 80
   attack4: 10
   speed4: 0

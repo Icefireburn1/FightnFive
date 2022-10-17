@@ -20,4 +20,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Defeat.unity
     guid: ea6cd156fa28ce64084bde61b50ce4cb
+  - enabled: 1
+    path: Assets/Scenes/SaveScreen.unity
+    guid: 327cbe763e70edc449fc0b506fbea931
+  - enabled: 1
+    path: Assets/Scenes/GameCompleted.unity
+    guid: ee226e68bf847114d83b120eb83092a5
+  - enabled: 1
+    path: Assets/Scenes/LoadScreen.unity
+    guid: e51384320d19b0c40b798935fb37a833
   m_configObjects: {}

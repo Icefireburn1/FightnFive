@@ -14,9 +14,10 @@ public static class GameManager
     private static GameObject charles = null;
     private static GameObject rogue = null;
 
-    public static int Chapter { get => 1; set => Chapter = value; }
+    public static int Chapter { get; set; }
     public static Floors CurrentFloor { get; set; }
     public static int CurrentFloorNumber { get; set; }
+    public static int CurrentlyChallengingFloorNumber { get; set; }
     
     public enum Heroes
     {
@@ -26,11 +27,24 @@ public static class GameManager
         Rogue
     }
 
+    /// <summary>
+    /// Increment highest game floor and chapter if needed
+    /// </summary>
+    public static void NextGameFloor()
+    {
+        CurrentFloorNumber++;
+        Chapter = (int)Mathf.Ceil((float)CurrentFloorNumber / 5f);
+        if (CurrentFloorNumber > 15)
+        {
+            SceneManager.LoadScene(6);
+        }
+    }
+
     static GameManager()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        // TODO: Be able to load save file
-        CurrentFloorNumber = 3;
+        Chapter = 3;
+        CurrentFloorNumber = 15;
     }
 
     public static void HealPlayerCharacters()
@@ -91,12 +105,18 @@ public static class GameManager
         if (sam == null)
             return;
 
+        // Battle Scene
         if (scene.buildIndex == 2)
         {
             SetVisiblity(sam, true);
             SetVisiblity(jerry, true);
             SetVisiblity(rogue, true);
             SetVisiblity(charles, true);
+
+            SetColliderActive(sam, true);
+            SetColliderActive(jerry, true);
+            SetColliderActive(rogue, true);
+            SetColliderActive(charles, true);
         }
         else
         {
@@ -110,5 +130,33 @@ public static class GameManager
     static void SetVisiblity(GameObject go, bool value)
     {
         go.GetComponent<SpriteRenderer>().enabled = value;
+    }
+
+    static void SetColliderActive(GameObject go, bool value)
+    {
+        go.GetComponent<BoxCollider2D>().enabled = value;
+    }
+
+    public static void SetPlayerAttributes(int attack, int health, int speed)
+    {
+        var samGO = sam.GetComponent<Character>();
+        var rogueGO = rogue.GetComponent<Character>();
+        var jerryGO = jerry.GetComponent<Character>();
+        var charlesGO = charles.GetComponent<Character>();
+
+        samGO.Attack = attack;
+        rogueGO.Attack = attack;
+        jerryGO.Attack = attack;
+        charlesGO.Attack = attack;
+
+        samGO.Health = health;
+        rogueGO.Health = health;
+        jerryGO.Health = health;
+        charlesGO.Health = health;
+
+        samGO.Speed = speed;
+        rogueGO.Speed = speed;
+        jerryGO.Speed = speed;
+        charlesGO.Speed = speed;
     }
 }

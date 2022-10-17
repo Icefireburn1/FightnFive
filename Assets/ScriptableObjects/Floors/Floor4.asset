@@ -13,6 +13,18 @@ MonoBehaviour:
   m_Name: Floor4
   m_EditorClassIdentifier: 
   enemy1: {fileID: 4848792969191730150, guid: 04c240fcee770ee4ab07573fc36cbda7, type: 3}
+  health1: 40
+  attack1: 10
+  speed1: 10
   enemy2: {fileID: 4848792969191730150, guid: 04c240fcee770ee4ab07573fc36cbda7, type: 3}
+  health2: 40
+  attack2: 10
+  speed2: 10
   enemy3: {fileID: 4848792969191730150, guid: 04c240fcee770ee4ab07573fc36cbda7, type: 3}
+  health3: 40
+  attack3: 10
+  speed3: 10
   enemy4: {fileID: 4848792969191730150, guid: 04c240fcee770ee4ab07573fc36cbda7, type: 3}
+  health4: 40
+  attack4: 10
+  speed4: 10

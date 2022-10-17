@@ -50,9 +50,9 @@ public abstract class Character : MonoBehaviour, Fightable
     /// Can apply healing and damage from an ability
     /// </summary>
     /// <param name="ability"></param>
-    public void ApplyAbilityToSelf(Ability ability)
+    public void ApplyAbilityToSelf(Ability ability, int othersAttack)
     {
-        this.health -= ability.baseDamage;
+        this.health -= ability.baseDamage + othersAttack;
         this.health += ability.healAmt;
 
         if (this.health <= 0)

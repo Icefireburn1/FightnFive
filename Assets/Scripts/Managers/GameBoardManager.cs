@@ -20,19 +20,55 @@ public class GameBoardManager : MonoBehaviour
 
     public Floors[] floors;
 
+    public int currentFloorsNum;
+    public int currentChapter;
+    public int currentChallengeFloor;
+
+    private void Update()
+    {
+        currentChapter = GameManager.Chapter;
+        currentFloorsNum = GameManager.CurrentFloorNumber;
+        currentChallengeFloor = GameManager.CurrentlyChallengingFloorNumber;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        button1.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + 1* GameManager.Chapter;
-        button2.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + 2* GameManager.Chapter;
-        button3.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + 3* GameManager.Chapter;
-        button4.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + 4* GameManager.Chapter;
-        button5.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + 5* GameManager.Chapter;
+        LoadButtons();
+    }
 
-        // TODO: Figure out why this doesnt work
-        if (ColorUtility.TryParseHtmlString("53FF00", out Color color))
+    void LoadButtons()
+    {
+        button1.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + (1 + ((GameManager.Chapter - 1) * 5));
+        button2.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + (2 + ((GameManager.Chapter - 1) * 5));
+        button3.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + (3 + ((GameManager.Chapter - 1) * 5));
+        button4.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + (4 + ((GameManager.Chapter - 1) * 5));
+        button5.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + (5 + ((GameManager.Chapter - 1) * 5));
+
+        SetButtonAttributes(button1, 1);
+        SetButtonAttributes(button2, 2);
+        SetButtonAttributes(button3, 3);
+        SetButtonAttributes(button4, 4);
+        SetButtonAttributes(button5, 5);
+    }
+
+    void SetButtonAttributes(Button go, int buttonNumber)
+    {
+        int num = (buttonNumber + ((GameManager.Chapter - 1) * 5));
+        if (GameManager.CurrentFloorNumber > num)
         {
-            button1.GetComponent<Image>().color = GameManager.CurrentFloorNumber > 1 * GameManager.Chapter ? color : button1.GetComponent<Image>().color;
+            go.GetComponent<Image>().color = Color.green;
+            go.interactable = true;
+        }
+        else if (GameManager.CurrentFloorNumber == num)
+        {
+            go.GetComponent<Image>().color = Color.red;
+            go.interactable = true;
+        }
+        else
+        {
+            go.GetComponent<Image>().color = Color.white;
+            go.interactable = false;
         }
     }
 
@@ -43,8 +79,27 @@ public class GameBoardManager : MonoBehaviour
 
     public void GotoBattleFloor(int buttonNumber)
     {
-        currentFloor = floors[buttonNumber - 1];
+        currentFloor = floors[(buttonNumber + ((GameManager.Chapter - 1) * 5)) - 1];
         GameManager.CurrentFloor = currentFloor;
+        GameManager.CurrentlyChallengingFloorNumber = (buttonNumber + ((GameManager.Chapter - 1) * 5));
         SceneManager.LoadScene(2); // go to battle
+    }
+
+    public void GotoNextChapter()
+    {
+        if (GameManager.Chapter < 3)
+        {
+            GameManager.Chapter++;
+            LoadButtons();
+        }
+    }
+
+    public void GotoPrevChapter()
+    {
+        if (GameManager.Chapter > 1)
+        {
+            GameManager.Chapter--;
+            LoadButtons();
+        }
     }
 }
