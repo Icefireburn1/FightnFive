@@ -14,11 +14,26 @@ public static class GameManager
     private static GameObject jerry = null;
     private static GameObject charles = null;
     private static GameObject rogue = null;
+    private static int numberUpgradesAvailable;
 
     public static int Chapter { get; set; }
     public static Floors CurrentFloor { get; set; }
     public static int CurrentFloorNumber { get; set; }
     public static int CurrentlyChallengingFloorNumber { get; set; }
+    public static int NumberUpgradesAvailable
+    { 
+        get
+        {
+            return numberUpgradesAvailable;
+        }
+        set
+        {
+            if (value >= 0)
+            {
+                numberUpgradesAvailable = value;
+            }
+        }
+    }
     
     public enum Heroes
     {
@@ -34,6 +49,7 @@ public static class GameManager
     /// </summary>
     public static void NextGameFloor()
     {
+        NumberUpgradesAvailable++;
         CurrentFloorNumber++;
         Chapter = (int)Mathf.Ceil((float)CurrentFloorNumber / 5f);
         if (CurrentFloorNumber > 15)
@@ -44,6 +60,7 @@ public static class GameManager
 
     static GameManager()
     {
+        NumberUpgradesAvailable = 0;
         SceneManager.sceneLoaded += OnSceneLoaded;
         Chapter = 1;
         CurrentFloorNumber = 1;

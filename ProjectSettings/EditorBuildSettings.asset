@@ -29,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SettingsScreen.unity
     guid: e51384320d19b0c40b798935fb37a833
+  - enabled: 1
+    path: Assets/Scenes/UnitUpgrade.unity
+    guid: da5aa906b8d66934291cc2209bfd4139
   m_configObjects: {}

@@ -73,7 +73,7 @@ public abstract class Character : MonoBehaviour, Fightable
     /// Can apply healing and damage from an ability
     /// </summary>
     /// <param name="ability"></param>
-    public void ApplyAbilityToSelf(Ability ability, int othersAttack)
+    public void ApplyAbilityToSelf(Ability ability, int othersDamage)
     {
         // Mainly fail-safe when testing
         if (maxHealth == 0 && health != 0)
@@ -81,7 +81,7 @@ public abstract class Character : MonoBehaviour, Fightable
 
         if (ability.baseDamage != 0)
         {
-            this.health -= ability.baseDamage + othersAttack;
+            this.health -= ability.baseDamage + othersDamage;
             DoDamagedAnimation();
         }
             
@@ -94,7 +94,8 @@ public abstract class Character : MonoBehaviour, Fightable
         if (this.health <= 0)
         {
             isAlive = false;
-            soundEffectSource.PlayOneShotDeath();
+            if (soundEffectSource != null)
+                soundEffectSource.PlayOneShotDeath();
         }
             
 
@@ -136,6 +137,9 @@ public abstract class Character : MonoBehaviour, Fightable
     /// </summary>
     void DoHealedAnimation()
     {
+        if (GetComponent<SpriteRenderer>() == null)
+            return;
+
         var spriteRend = GetComponent<SpriteRenderer>();
         spriteRend.color = Color.green;
         transform.localScale = new Vector3(hurtScale, hurtScale, transform.localScale.z);
@@ -147,6 +151,9 @@ public abstract class Character : MonoBehaviour, Fightable
     /// </summary>
     void DoDamagedAnimation()
     {
+        if (GetComponent<SpriteRenderer>() == null)
+            return;
+
         var spriteRend = GetComponent<SpriteRenderer>();
         spriteRend.color = Color.red;
         transform.localScale = new Vector3(hurtScale, hurtScale, transform.localScale.z);
@@ -161,8 +168,11 @@ public abstract class Character : MonoBehaviour, Fightable
     IEnumerator UndoAnimation()
     {
         yield return new WaitForSeconds(0.1f);
-        var spriteRend = GetComponent<SpriteRenderer>();
-        spriteRend.color = Color.white;
-        transform.localScale = normalScale;
+        if (GetComponent<SpriteRenderer>() != null)
+        {
+            var spriteRend = GetComponent<SpriteRenderer>();
+            spriteRend.color = Color.white;
+            transform.localScale = normalScale;
+        }
     }
 }

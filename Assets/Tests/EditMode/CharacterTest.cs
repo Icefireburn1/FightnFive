@@ -20,18 +20,29 @@ public class CharacterTest
     }
 
     [Test]
+    [DebugLoggerEnablement(false)]
     public void TestCharacterDamageCalculation()
     {
         var chara = new GameObject();
         var hero = chara.AddComponent<Hero>();
+
         hero.Health = 100;
+        hero.Attack = 0;
+        hero.BonusAttack = 0;
 
         var ability = ScriptableObject.CreateInstance<Ability>();
         ability.baseDamage = 10;
         
-        hero.ApplyAbilityToSelf(ability, 10);
+        hero.ApplyAbilityToSelf(ability, hero.Damage);
+        Assert.AreEqual(90, hero.Health);
 
-        Assert.IsTrue(hero.Health == 80);
+        hero.BonusAttack = 10;
+        hero.ApplyAbilityToSelf(ability, hero.Damage);
+        Assert.AreEqual(70, hero.Health);
+
+        hero.Attack = 10;
+        hero.ApplyAbilityToSelf(ability, hero.Damage);
+        Assert.AreEqual(40, hero.Health);
     }
 
     [Test]
@@ -76,5 +87,19 @@ public class CharacterTest
         hero.HealToFull();
 
         Assert.IsTrue(hero.Health == hero.MaxHealth);
+    }
+
+    [Test]
+    public void TestUpgradeBonusAttack()
+    {
+        var chara = new GameObject();
+        var hero = chara.AddComponent<Hero>();
+        hero.UpgradeBonusAttack();
+
+        Assert.AreEqual(2, hero.BonusAttack);
+
+        hero.UpgradeBonusAttack();
+
+        Assert.AreEqual(4, hero.BonusAttack);
     }
 }

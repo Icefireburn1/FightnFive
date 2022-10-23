@@ -1856,6 +1856,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1240251990371171506, guid: bda0f8b4967bd7c478e6c40b24c3a594, type: 3}
+      propertyPath: attack
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1240251990371171508, guid: bda0f8b4967bd7c478e6c40b24c3a594, type: 3}
       propertyPath: m_Name
       value: Sam
@@ -1954,6 +1958,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Charles
       objectReference: {fileID: 0}
+    - target: {fileID: 3591548954390100748, guid: 3fc5467ab277d1a499a4ca37e081948b, type: 3}
+      propertyPath: attack
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3591548954390100750, guid: 3fc5467ab277d1a499a4ca37e081948b, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -2007,6 +2015,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7691456582488291057, guid: bc86a9d4c228403429d4be76b5a6dde5, type: 3}
+      propertyPath: attack
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7691456582488291059, guid: bc86a9d4c228403429d4be76b5a6dde5, type: 3}
       propertyPath: m_Name
       value: Rogue
@@ -2111,6 +2123,10 @@ PrefabInstance:
     - target: {fileID: 8171454586234698743, guid: 8acb841adcb5ad942be28635ad2eb945, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8171454586234698744, guid: 8acb841adcb5ad942be28635ad2eb945, type: 3}
+      propertyPath: attack
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8171454586234698746, guid: 8acb841adcb5ad942be28635ad2eb945, type: 3}
       propertyPath: m_Name

@@ -9,6 +9,22 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class Hero : Character
 {
+    public int BonusAttack { get; set; }
+    public int Damage
+    {
+        get
+        {
+            return Attack + BonusAttack; // Used in damage calculations for heros
+        }
+    }
+
+    private new void Start()
+    {
+        base.Start();
+        BonusAttack = 0;
+    }
+
+
     private void Awake()
     {
         IsPlayer = true;
@@ -25,5 +41,10 @@ public class Hero : Character
     {
         Health = MaxHealth;
         IsAlive = true;
+    }
+
+    public void UpgradeBonusAttack()
+    {
+        BonusAttack += 2;
     }
 }

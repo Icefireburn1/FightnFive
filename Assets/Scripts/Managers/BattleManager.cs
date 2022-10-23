@@ -113,7 +113,7 @@ public class BattleManager : MonoBehaviour
         foreach(GameObject go in selectedUnits)
         {
             PlayAbilitySoundEffect(selectedAbility);
-            go.GetComponent<Character>().ApplyAbilityToSelf(selectedAbility, turnOrder.GetMoving().GetComponent<Character>().Attack);
+            go.GetComponent<Character>().ApplyAbilityToSelf(selectedAbility, turnOrder.GetMoving().GetComponent<Hero>().Damage);
         }
         ClearAllMarkers();
         selectedAbility = null;
