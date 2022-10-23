@@ -7,10 +7,11 @@ using UnityEngine;
 /// </summary>
 public class Enemy : Character
 {
+
     // Update is called once per frame
     void Update()
     {
-        base.CustomUpdate();
+        CustomUpdate();
     }
 
     public void SetAttributes(int attack, int health, int speed, Vector3 hpPosition)

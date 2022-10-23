@@ -12,9 +12,24 @@ public class SoundManager : MonoBehaviour
     public AudioClip battleMusic;
     public AudioClip defeatMusic;
     public AudioClip victoryMusic;
+    public AudioClip deathClip;
     public AudioSource audioSource;
     public float delay = 2f;
-    public float volume = 0.1f;
+    private float volume = 0.1f;
+
+    public float Volume
+    {
+        get
+        {
+            return volume;
+        }
+        set
+        {
+            volume = value;
+            audioSource.volume = value;
+        }
+    }
+
 
     public enum SceneNames
     {
@@ -31,7 +46,8 @@ public class SoundManager : MonoBehaviour
         DontDestroyOnLoad(transform.gameObject);
         audioSource.loop = true;
         audioSource.clip = mainMenuMusic;
-        audioSource.volume = volume;
+        audioSource.volume = Volume;
+        audioSource.volume = PlayerPrefs.GetFloat("volume", Volume);
         if (!audioSource.isPlaying)
             audioSource.PlayDelayed(delay);
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -47,15 +63,15 @@ public class SoundManager : MonoBehaviour
         audioSource = gameObject.GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    // TODO: This can play the same sound simultaniously for AoE abilities
     public void PlayOneShot(AudioClip clip)
     {
         audioSource.PlayOneShot(clip);
+    }
+
+    public void PlayOneShotDeath()
+    {
+        audioSource.PlayOneShot(deathClip);
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)

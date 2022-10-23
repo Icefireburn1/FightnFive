@@ -869,7 +869,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 210}
+  m_AnchoredPosition: {x: 0, y: 161}
   m_SizeDelta: {x: 662.655, y: 134.2334}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1054705960
@@ -925,7 +925,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1877,6 +1877,10 @@ PrefabInstance:
       propertyPath: delay
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1471209500274402042, guid: 37d51e8d193b6f140a877c9f7df359f6, type: 3}
+      propertyPath: deathClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 566d2ea6240b489479a6e9fd608c2621, type: 3}
     - target: {fileID: 1471209500274402042, guid: 37d51e8d193b6f140a877c9f7df359f6, type: 3}
       propertyPath: battleMusic
       value: 

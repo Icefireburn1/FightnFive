@@ -48,7 +48,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     public TurnOrder turnOrder;
 
-    public bool beginBattle = false;
+    public bool beginBattle;
     public bool isPlayersTurn = false;
 
     public GameObject HpPrefab;
@@ -82,6 +82,7 @@ public class BattleManager : MonoBehaviour
 
     void Init()
     {
+        beginBattle = false;
         currentFloors = GameManager.CurrentFloor;
         selectedUnits = new List<GameObject>();
     }
@@ -111,6 +112,7 @@ public class BattleManager : MonoBehaviour
         
         foreach(GameObject go in selectedUnits)
         {
+            PlayAbilitySoundEffect(selectedAbility);
             go.GetComponent<Character>().ApplyAbilityToSelf(selectedAbility, turnOrder.GetMoving().GetComponent<Character>().Attack);
         }
         ClearAllMarkers();
@@ -201,6 +203,9 @@ public class BattleManager : MonoBehaviour
             {
                 // TODO: can make this "smarter"
                 GameObject movingAI = turnOrder.GetMoving();
+                Ability movingAbility = movingAI.GetComponent<Character>().Ability1;
+                int movingAttack = movingAI.GetComponent<Character>().Attack;
+
                 GameObject targetPlayerCharacter = GetRandomAlivePlayerCharacter();
                 // This is null when no players are left standing
                 if (targetPlayerCharacter == null)
@@ -208,10 +213,20 @@ public class BattleManager : MonoBehaviour
                     return;
                 }
 
-                targetPlayerCharacter.GetComponent<Character>().ApplyAbilityToSelf(movingAI.GetComponent<Character>().Ability1, movingAI.GetComponent<Character>().Attack); // do attack
+                PlayAbilitySoundEffect(movingAbility);
+                targetPlayerCharacter.GetComponent<Character>().ApplyAbilityToSelf(movingAbility, movingAttack); // do attack
                 FinishCurrentAICharacterTurn();
             }
         }
+    }
+
+    void PlayAbilitySoundEffect(Ability ability)
+    {
+        if (ability.soundEffect == null)
+        {
+            Debug.LogError("This ability needs a sound effect!");
+        }
+        audioSource.PlayOneShot(ability.soundEffect);
     }
 
     void DoBattleEnd(int result)
@@ -421,9 +436,9 @@ public class BattleManager : MonoBehaviour
             btnAbility2.GetComponentInChildren<TextMeshProUGUI>().text = firstMovingPlayerCharacter.Ability2.title;
             btnAbility3.GetComponentInChildren<TextMeshProUGUI>().text = firstMovingPlayerCharacter.Ability3.title;
 
-            btnAbility1.onClick.RemoveAllListeners();
-            btnAbility2.onClick.RemoveAllListeners();
-            btnAbility3.onClick.RemoveAllListeners();
+            btnAbility1.onClick.RemoveListener(() => SetActiveAbility(0));
+            btnAbility2.onClick.RemoveListener(() => SetActiveAbility(1));
+            btnAbility3.onClick.RemoveListener(() => SetActiveAbility(2));
 
             btnAbility1.onClick.AddListener(() => SetActiveAbility(0));
             btnAbility2.onClick.AddListener(() => SetActiveAbility(1));

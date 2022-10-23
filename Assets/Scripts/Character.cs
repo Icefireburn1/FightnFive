@@ -46,8 +46,14 @@ public abstract class Character : MonoBehaviour, Fightable
     public GameObject healthBar;
     public SoundManager soundEffectSource;
 
-    private void Awake()
+    // Hurt Animation
+    Vector3 normalScale;
+    readonly float hurtScale = 0.8f;
+
+    protected void Start()
     {
+        normalScale = transform.localScale;
+
         try
         {
             soundEffectSource = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<SoundManager>();
@@ -74,23 +80,29 @@ public abstract class Character : MonoBehaviour, Fightable
             maxHealth = health;
 
         if (ability.baseDamage != 0)
+        {
             this.health -= ability.baseDamage + othersAttack;
-        this.health += ability.healAmt;
+            DoDamagedAnimation();
+        }
+            
+        if (ability.healAmt > 0)
+        {
+            this.health += ability.healAmt;
+            DoHealedAnimation();
+        }
 
         if (this.health <= 0)
+        {
             isAlive = false;
+            soundEffectSource.PlayOneShotDeath();
+        }
+            
 
         if (this.health > maxHealth)
         {
             this.health = maxHealth;
         }
         // TODO: check status effect
-
-        if (ability.soundEffect == null)
-        {
-            Debug.LogError("This ability needs a sound effect!");
-        }
-        soundEffectSource.PlayOneShot(ability.soundEffect);
     }
 
     public void Heal(int amt)
@@ -117,5 +129,40 @@ public abstract class Character : MonoBehaviour, Fightable
         {
             isAlive = false;
         }
+    }
+
+    /// <summary>
+    /// Healed animation.
+    /// </summary>
+    void DoHealedAnimation()
+    {
+        var spriteRend = GetComponent<SpriteRenderer>();
+        spriteRend.color = Color.green;
+        transform.localScale = new Vector3(hurtScale, hurtScale, transform.localScale.z);
+        StartCoroutine("UndoAnimation");
+    }
+
+    /// <summary>
+    /// Damaged animation.
+    /// </summary>
+    void DoDamagedAnimation()
+    {
+        var spriteRend = GetComponent<SpriteRenderer>();
+        spriteRend.color = Color.red;
+        transform.localScale = new Vector3(hurtScale, hurtScale, transform.localScale.z);
+        StartCoroutine("UndoAnimation");
+    }
+
+    /// <summary>
+    /// Undo the visual effects of a character being hurt.
+    /// </summary>
+    /// <param name="waitTime"></param>
+    /// <returns></returns>
+    IEnumerator UndoAnimation()
+    {
+        yield return new WaitForSeconds(0.1f);
+        var spriteRend = GetComponent<SpriteRenderer>();
+        spriteRend.color = Color.white;
+        transform.localScale = normalScale;
     }
 }

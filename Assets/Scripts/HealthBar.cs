@@ -17,18 +17,10 @@ public class HealthBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Image[] imageComps = GetComponentsInChildren<Image>();
-        foreach(Image i in imageComps)
-        {
-            if (i.type == Image.Type.Filled)
-            {
-                healthBar = i;
-            }
-        }
+        healthBar = GetImageFilledComponent();
+
         if (healthBar == null)
-        {
             throw new NullReferenceException();
-        }
     }
 
     /// <summary>
@@ -57,6 +49,10 @@ public class HealthBar : MonoBehaviour
     public void DoUpdateFillAmount()
     {
         if (character == null) return;
+        if (healthBar == null)
+        {
+            healthBar = GetImageFilledComponent(); // Try this if healthBar didn't get set fast enough
+        }
 
         healthBar.fillAmount = (float)character.Health / (float)character.MaxHealth;
     }
