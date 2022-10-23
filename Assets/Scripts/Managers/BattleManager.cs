@@ -6,9 +6,9 @@ using UnityEngine.SceneManagement;
 using Unity.Collections;
 using UnityEngine.UI;
 using System.Linq;
-using TMPro;
 using UnityEngine.EventSystems;
 using Random = System.Random;
+using TMPro;
 
 /// <summary>
 /// This object controls everything that happens in the Battle scene.
@@ -52,6 +52,13 @@ public class BattleManager : MonoBehaviour
     public bool isPlayersTurn = false;
 
     public GameObject HpPrefab;
+    public SoundManager audioSource;
+    public AudioClip targetSelectSound;
+
+    private void Awake()
+    {
+        audioSource = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -66,11 +73,17 @@ public class BattleManager : MonoBehaviour
             PopulateAbilityButtons();
             EndInit();
         }
-        catch (UnauthorizedAccessException e)
+        catch (UnauthorizedAccessException)
         {
             SceneManager.LoadScene(1);
             Debug.Log("Going to previous screen.");
         }
+    }
+
+    void Init()
+    {
+        currentFloors = GameManager.CurrentFloor;
+        selectedUnits = new List<GameObject>();
     }
 
     void EndInit()
@@ -280,6 +293,7 @@ public class BattleManager : MonoBehaviour
         if (hit.collider != null && Input.GetMouseButtonDown(0))
         {
             Debug.Log(hit.transform.gameObject.name + " Position: " + hit.collider.gameObject.transform.position);
+            audioSource.PlayOneShot(targetSelectSound);
             DoMarker(hit.transform);
         }
     }
@@ -346,12 +360,6 @@ public class BattleManager : MonoBehaviour
         {
             Destroy(g);
         }
-    }
-
-    void Init()
-    {
-        currentFloors = GameManager.CurrentFloor;
-        selectedUnits = new List<GameObject>();
     }
 
     void SpawnPlayers()

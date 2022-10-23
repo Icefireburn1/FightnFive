@@ -19,3 +19,4 @@ MonoBehaviour:
   percentEffectChance: 0
   eligibleTargets: 2
   statusEffect: 0
+  soundEffect: {fileID: 8300000, guid: 88b1cbe3caa3fee4b8b103b5edd7aba9, type: 3}

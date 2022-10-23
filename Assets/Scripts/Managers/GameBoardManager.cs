@@ -39,17 +39,31 @@ public class GameBoardManager : MonoBehaviour
 
     void LoadButtons()
     {
-        button1.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + (1 + ((GameManager.Chapter - 1) * 5));
-        button2.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + (2 + ((GameManager.Chapter - 1) * 5));
-        button3.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + (3 + ((GameManager.Chapter - 1) * 5));
-        button4.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + (4 + ((GameManager.Chapter - 1) * 5));
-        button5.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + (5 + ((GameManager.Chapter - 1) * 5));
+        if (button1 != null || button2 != null || button3 != null || button4 != null || button5 != null)
+        {
+            button1.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + (1 + ((GameManager.Chapter - 1) * 5));
+            button2.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + (2 + ((GameManager.Chapter - 1) * 5));
+            button3.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + (3 + ((GameManager.Chapter - 1) * 5));
+            button4.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + (4 + ((GameManager.Chapter - 1) * 5));
+            button5.GetComponentInChildren<TextMeshProUGUI>().text = "Floor " + (5 + ((GameManager.Chapter - 1) * 5));
+        }
+        else
+        {
+            Debug.LogError("Buttons are not set!");
+        }
 
-        SetButtonAttributes(button1, 1);
-        SetButtonAttributes(button2, 2);
-        SetButtonAttributes(button3, 3);
-        SetButtonAttributes(button4, 4);
-        SetButtonAttributes(button5, 5);
+        if (button1 != null || button2 != null || button3 != null || button4 != null || button5 != null)
+        {
+            SetButtonAttributes(button1, 1);
+            SetButtonAttributes(button2, 2);
+            SetButtonAttributes(button3, 3);
+            SetButtonAttributes(button4, 4);
+            SetButtonAttributes(button5, 5);
+        }
+        else
+        {
+            Debug.LogError("Buttons are not set!");
+        }
     }
 
     void SetButtonAttributes(Button go, int buttonNumber)

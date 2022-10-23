@@ -8,6 +8,8 @@ TagManager:
   - Marker
   - Canvas
   - Healthbar
+  - SoundManager
+  - Background
   layers:
   - Default
   - TransparentFX
@@ -15,7 +17,7 @@ TagManager:
   - Character
   - Water
   - UI
-  - 
+  - Background
   - 
   - 
   - 
@@ -44,4 +46,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 2649187659
     locked: 0

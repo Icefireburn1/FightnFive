@@ -16,6 +16,7 @@ public class Ability : ScriptableObject
     public int percentEffectChance;
     public EligibleTarget eligibleTargets;
     public StatusEffect statusEffect;
+    public AudioClip soundEffect;
 
     public enum EligibleTarget
     {

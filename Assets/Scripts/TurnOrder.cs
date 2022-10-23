@@ -41,13 +41,17 @@ public class TurnOrder
         return turnOrder;
     }
 
+    /// <summary>
+    /// Remove an item from turn order using a direct reference
+    /// </summary>
+    /// <param name="go"></param>
     public void RemoveFromTurnOrder(GameObject go)
     {
         turnOrder.Remove(go);
     }
 
     /// <summary>
-    /// 
+    /// Moves the character at the beginning of the TurnOrder to the end.
     /// </summary>
     /// <returns>The character that is moving AFTER the shuffle has happened</returns>
     public GameObject DoNext()
@@ -96,5 +100,14 @@ public class TurnOrder
             }
         }
         return null;
+    }
+
+    /// <summary>
+    /// Number of items in turnOrder.
+    /// </summary>
+    /// <returns>Number of items in turnOrder</returns>
+    public int Size()
+    {
+        return turnOrder.Count;
     }
 }

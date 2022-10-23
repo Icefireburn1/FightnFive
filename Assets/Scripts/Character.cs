@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,7 +44,19 @@ public abstract class Character : MonoBehaviour, Fightable
 
     public GameObject marker;
     public GameObject healthBar;
-    
+    public SoundManager soundEffectSource;
+
+    private void Awake()
+    {
+        try
+        {
+            soundEffectSource = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<SoundManager>();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError(ex);
+        }
+    }
 
     public void UseAbility(Ability ability, Character target)
     {
@@ -56,7 +69,12 @@ public abstract class Character : MonoBehaviour, Fightable
     /// <param name="ability"></param>
     public void ApplyAbilityToSelf(Ability ability, int othersAttack)
     {
-        this.health -= ability.baseDamage + othersAttack;
+        // Mainly fail-safe when testing
+        if (maxHealth == 0 && health != 0)
+            maxHealth = health;
+
+        if (ability.baseDamage != 0)
+            this.health -= ability.baseDamage + othersAttack;
         this.health += ability.healAmt;
 
         if (this.health <= 0)
@@ -67,6 +85,12 @@ public abstract class Character : MonoBehaviour, Fightable
             this.health = maxHealth;
         }
         // TODO: check status effect
+
+        if (ability.soundEffect == null)
+        {
+            Debug.LogError("This ability needs a sound effect!");
+        }
+        soundEffectSource.PlayOneShot(ability.soundEffect);
     }
 
     public void Heal(int amt)

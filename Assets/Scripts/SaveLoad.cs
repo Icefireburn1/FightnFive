@@ -10,15 +10,16 @@ using System.Runtime.Serialization.Formatters.Binary;
 /// </summary>
 public static class SaveLoad
 {
+    readonly static string PATH = Application.persistentDataPath + "/Game.save";
+
     public static void SaveData()
     {
         if (GameManager.GetPlayerCharacter(GameManager.Heroes.Sam) == null)
             return;
 
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/Game.save";
 
-        FileStream stream = new FileStream(path, FileMode.Create);
+        FileStream stream = new FileStream(PATH, FileMode.Create);
 
         var playerChar = GameManager.GetPlayerCharacter(GameManager.Heroes.Sam).GetComponent<Character>();
         GameSaveData gameData = new GameSaveData(GameManager.CurrentFloorNumber, playerChar.Health, playerChar.Attack, playerChar.Speed);
@@ -27,14 +28,17 @@ public static class SaveLoad
         stream.Close();
     }
 
+    public static bool SaveFileExists()
+    {
+        return File.Exists(PATH);
+    }
+
     public static GameSaveData LoadData()
     {
-        string path = Application.persistentDataPath + "/Game.save";
-
-        if (File.Exists(path))
+        if (SaveFileExists())
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = new FileStream(path, FileMode.Open);
+            FileStream stream = new FileStream(PATH, FileMode.Open);
 
             GameSaveData data = formatter.Deserialize(stream) as GameSaveData;
 
@@ -44,7 +48,7 @@ public static class SaveLoad
         }
         else
         {
-            Debug.LogError("Error: Save file not found in " + path);
+            Debug.LogError("Error: Save file not found in " + PATH);
             return null;
         }
     }
