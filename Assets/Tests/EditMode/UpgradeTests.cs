@@ -27,4 +27,16 @@ public class UpgradeTests
         GameManager.NumberUpgradesAvailable += 5;
         Assert.AreEqual(GameManager.NumberUpgradesAvailable, 6);
     }
+
+    [Test]
+    public void TestCharacterAttackIncrease()
+    {
+        GameObject go = new GameObject();
+        Hero he = go.AddComponent<Hero>();
+
+        Assert.AreEqual(he.BonusAttack, 0);
+
+        he.UpgradeBonusAttack();
+        Assert.AreEqual(he.BonusAttack, 2);
+    }
 }

@@ -1,12 +1,9 @@
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Unity.Collections;
 using UnityEngine.UI;
 using System.Linq;
-using UnityEngine.EventSystems;
 using Random = System.Random;
 using TMPro;
 

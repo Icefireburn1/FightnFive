@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -82,6 +81,16 @@ public class CharacterPlayModeTest
         yield return new WaitForSeconds(0.1f);
 
         Assert.NotNull(rogue.GetComponent<BoxCollider2D>());
+    }
+
+    [UnityTest]
+    public IEnumerator TestCreateMarker()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        sam.GetComponent<Character>().CreateMarker();
+        var result = GameObject.FindGameObjectWithTag("Marker");
+        Assert.IsNotNull(result);
     }
 
     [TearDown]

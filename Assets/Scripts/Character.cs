@@ -106,16 +106,6 @@ public abstract class Character : MonoBehaviour, Fightable
         // TODO: check status effect
     }
 
-    public void Heal(int amt)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void TakeDamage(int dmg)
-    {
-        throw new System.NotImplementedException();
-    }
-
     public void CreateMarker()
     {
         Instantiate(marker, new Vector3(transform.position.x + .022f, transform.position.y + 0.815f), transform.rotation);

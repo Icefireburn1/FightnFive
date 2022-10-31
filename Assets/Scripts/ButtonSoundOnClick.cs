@@ -1,9 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Fast and effective way to add sounds to our button presses
+/// </summary>
 [RequireComponent(typeof(AudioSource))]
 public class ButtonSoundOnClick : MonoBehaviour
 {
@@ -16,17 +17,15 @@ public class ButtonSoundOnClick : MonoBehaviour
         button.onClick.AddListener(DoOnClick);
     }
 
+    // Calls before Start
     private void Awake()
     {
         button = GetComponent<Button>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    /// <summary>
+    /// What the button will do when clicked
+    /// </summary>
     void DoOnClick()
     {
         try

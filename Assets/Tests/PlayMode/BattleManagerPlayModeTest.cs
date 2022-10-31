@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -14,6 +13,7 @@ public class BattleManagerPlayModeTest
         bm = new GameObject();
     }
 
+    [DebugLoggerEnablement(false)]
     [UnityTest]
     public IEnumerator TestBattleManagerNoError()
     {
