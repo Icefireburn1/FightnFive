@@ -12,11 +12,16 @@ This is a small project that aims to create a simple and complete role-playing g
 # Technologies
 - [Unity](https://unity.com/) - C# game engine that handles game rendering and input. Through the use of C# scripts, developers are able to utilize the Unity framework to create a game without having to worry about the low-level development of the GUI.
 
+# Build
+```
+git clone https://github.com/Icefireburn1/FightnFive.git
+```
+
 # Installation
 > NOTE: this game has only been tested for Windows.
 > 
-Every published build of the game can be found from [releases](https://github.com/Icefireburn1/FightnFive/releases).
 ![image](https://user-images.githubusercontent.com/3673861/200211715-c2823bb7-1c30-4888-9b1a-40a7ee21c55f.png)<br>
+Every published build of the game can be found from [releases](https://github.com/Icefireburn1/FightnFive/releases).
 After downloading the .zip file, extract the game to the desired folder. The game can be ran by running FightnFive.exe.
 
 # Credit
