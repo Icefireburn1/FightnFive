@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,11 +13,17 @@ public class MySceneManager : MonoBehaviour
         SceneManager.LoadScene(index);
     }
 
+    /// <summary>
+    /// Saves game when button is pressed
+    /// </summary>
     public void SaveGame()
     {
         RunAllSaves();
     }
 
+    /// <summary>
+    /// This will utilize a save file and the PlayerPrefs cache
+    /// </summary>
     void RunAllSaves()
     {
         PlayerPrefs.SetInt("numUpgrades", GameManager.NumberUpgradesAvailable);
@@ -29,11 +35,17 @@ public class MySceneManager : MonoBehaviour
         Debug.Log("Game saved");
     }
 
+    /// <summary>
+    /// Load game information from save file
+    /// </summary>
     public void LoadGame()
     {
         RunAllLoads();
     }
 
+    /// <summary>
+    /// Loads information from both save systems
+    /// </summary>
     void RunAllLoads()
     {
         GameSaveData data = SaveLoad.LoadData();
@@ -48,6 +60,9 @@ public class MySceneManager : MonoBehaviour
         Debug.Log("Game loaded");
     }
 
+    /// <summary>
+    /// Closes the game safely
+    /// </summary>
     public void QuitGame()
     {
         Application.Quit();

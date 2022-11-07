@@ -77,6 +77,9 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Run at the beginning
+    /// </summary>
     void Init()
     {
         beginBattle = false;
@@ -84,6 +87,9 @@ public class BattleManager : MonoBehaviour
         selectedUnits = new List<GameObject>();
     }
 
+    /// <summary>
+    /// Run at the end
+    /// </summary>
     void EndInit()
     {
         beginBattle = true;
@@ -91,6 +97,11 @@ public class BattleManager : MonoBehaviour
         gameObject.GetComponent<DoubleClick>().doubleClicked += new EventHandler(HandleDoubleClick);
     }
 
+    /// <summary>
+    /// This will be called when the player doubleclicks
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     void HandleDoubleClick(object sender, EventArgs e)
     {
         // Don't do anything when its not our turn
@@ -117,6 +128,9 @@ public class BattleManager : MonoBehaviour
         FinishCurrentPlayerCharacterTurn();
     }
 
+    /// <summary>
+    /// End the player's turn and clean up any assets if needed.
+    /// </summary>
     void FinishCurrentPlayerCharacterTurn()
     {
         CleanUpDeadAssets();
@@ -125,6 +139,9 @@ public class BattleManager : MonoBehaviour
         isPlayersTurn = nowMovingGO.GetComponent<Character>().IsPlayer;
     }
 
+    /// <summary>
+    /// End the AI's turn and clean up any assets if needed.
+    /// </summary>
     void FinishCurrentAICharacterTurn()
     {
         CleanUpDeadAssets();
@@ -132,6 +149,9 @@ public class BattleManager : MonoBehaviour
         isPlayersTurn = nowMovingGO.GetComponent<Character>().IsPlayer;
     }
 
+    /// <summary>
+    /// Helper function to delete "dead" or unused assets
+    /// </summary>
     void CleanUpDeadAssets()
     {
         foreach(GameObject go in GameObject.FindGameObjectsWithTag("Enemy"))
@@ -162,6 +182,9 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Creates the healthbars for battle characters
+    /// </summary>
     private void CreateHealthBars()
     {
         try
@@ -217,6 +240,10 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Plays a sound effect that is attached to an ability
+    /// </summary>
+    /// <param name="ability"></param>
     void PlayAbilitySoundEffect(Ability ability)
     {
         if (ability.soundEffect == null)
@@ -226,6 +253,10 @@ public class BattleManager : MonoBehaviour
         audioSource.PlayOneShot(ability.soundEffect);
     }
 
+    /// <summary>
+    /// Change game scene based on game result: victory or defeat.
+    /// </summary>
+    /// <param name="result"></param>
     void DoBattleEnd(int result)
     {
         switch (result)
@@ -273,6 +304,10 @@ public class BattleManager : MonoBehaviour
         return 0;
     }
 
+    /// <summary>
+    /// Used by AI to decide which player owned character to attack during battle
+    /// </summary>
+    /// <returns></returns>
     GameObject GetRandomAlivePlayerCharacter()
     {
         GameObject[] gos = GameObject.FindGameObjectsWithTag("Player");
@@ -365,6 +400,9 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Clears all markers in the scene
+    /// </summary>
     void ClearAllMarkers()
     {
         GameObject[] markers = GameObject.FindGameObjectsWithTag("Marker");
@@ -374,6 +412,9 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Make sure the characters exist and are fully healed
+    /// </summary>
     void SpawnPlayers()
     {
         try
@@ -397,6 +438,9 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Create the enemies
+    /// </summary>
     void SpawnEnemies()
     {
         // We started in the battle scene
@@ -424,6 +468,9 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Assign the correct abilities to each button based on moving character
+    /// </summary>
     void PopulateAbilityButtons()
     {
         try
@@ -448,6 +495,10 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This is triggered by buttons to determine which character ability to use
+    /// </summary>
+    /// <param name="num"></param>
     void SetActiveAbility(int num)
     {
         switch (num)
@@ -466,6 +517,10 @@ public class BattleManager : MonoBehaviour
         selectedUnits = new(); // Clear targets
     }
 
+    /// <summary>
+    /// Create our turnorder and add all of our battle characters/enemies to it.
+    /// This will automatically sort by speed.
+    /// </summary>
     void CreateTurnOrder()
     {
         try

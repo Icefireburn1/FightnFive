@@ -1,9 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Might not be used anymore...
+/// The target that is selected during battle
 /// </summary
 public class SelectedTarget : MonoBehaviour
 {

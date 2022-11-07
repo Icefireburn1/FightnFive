@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -18,16 +18,27 @@ public class TurnOrder
         this.turnOrder = new List<GameObject>();
     }
 
+    /// <summary>
+    /// Add a single object to the turnorder
+    /// </summary>
+    /// <param name="o"></param>
     public void Add(GameObject o)
     {
         turnOrder.Add(o);
     }
 
+    /// <summary>
+    /// Adds an already existing list to the turnorder
+    /// </summary>
+    /// <param name="o"></param>
     public void AddList(List<GameObject> o)
     {
         turnOrder.AddRange(o);
     }
 
+    /// <summary>
+    /// Sort the characters by speed. Fastest move first.
+    /// </summary>
     public void SortBySpeed()
     {
         turnOrder.Sort(delegate (GameObject x, GameObject y)
@@ -36,6 +47,10 @@ public class TurnOrder
         });
     }
 
+    /// <summary>
+    /// Get the list of units in turnorder
+    /// </summary>
+    /// <returns></returns>
     public List<GameObject> GetAllUnits()
     {
         return turnOrder;

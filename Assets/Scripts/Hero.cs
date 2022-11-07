@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -37,12 +37,18 @@ public class Hero : Character
         base.CustomUpdate();
     }
 
+    /// <summary>
+    /// Revive the character and make its hp equal to its max health.
+    /// </summary>
     public void HealToFull()
     {
         Health = MaxHealth;
         IsAlive = true;
     }
 
+    /// <summary>
+    /// Used when the player ugrades a character's attack
+    /// </summary>
     public void UpgradeBonusAttack()
     {
         BonusAttack += 2;

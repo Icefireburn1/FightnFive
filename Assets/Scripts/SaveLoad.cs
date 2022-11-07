@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
@@ -12,6 +12,9 @@ public static class SaveLoad
 {
     readonly static string PATH = Application.persistentDataPath + "/Game.save";
 
+    /// <summary>
+    /// Saves game information to file.
+    /// </summary>
     public static void SaveData()
     {
         if (GameManager.GetPlayerCharacter(GameManager.Heroes.Sam) == null)
@@ -28,11 +31,19 @@ public static class SaveLoad
         stream.Close();
     }
 
+    /// <summary>
+    /// Check if save file exists
+    /// </summary>
+    /// <returns></returns>
     public static bool SaveFileExists()
     {
         return File.Exists(PATH);
     }
 
+    /// <summary>
+    /// Loads game information from file
+    /// </summary>
+    /// <returns></returns>
     public static GameSaveData LoadData()
     {
         if (SaveFileExists())

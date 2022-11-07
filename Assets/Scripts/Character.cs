@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +7,7 @@ using UnityEngine;
 /// All battle characters inherit this class. It stores basic information such as
 /// battle stats and battle actions.
 /// </summary>
-public abstract class Character : MonoBehaviour, Fightable
+public abstract class Character : MonoBehaviour
 {
     [SerializeField]
     private int attack;
@@ -106,6 +106,9 @@ public abstract class Character : MonoBehaviour, Fightable
         // TODO: check status effect
     }
 
+    /// <summary>
+    /// Creates a marker object object this object.
+    /// </summary>
     public void CreateMarker()
     {
         Instantiate(marker, new Vector3(transform.position.x + .022f, transform.position.y + 0.815f), transform.rotation);

@@ -1,8 +1,11 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Helper class to manage CheckBoxes
+/// </summary>
 public class CheckBoxToggle : MonoBehaviour
 {
     Toggle checkBox;
@@ -15,6 +18,9 @@ public class CheckBoxToggle : MonoBehaviour
         checkBox.isOn = PlayerPrefs.GetInt("mute", 0) == 1;
     }
 
+    /// <summary>
+    /// Save music mute status to PlayerPrefs which persists between game sessions
+    /// </summary>
     public void SaveMuteToggleChange()
     {
         sm.SetMute(checkBox.isOn);

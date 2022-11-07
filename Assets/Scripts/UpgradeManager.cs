@@ -1,9 +1,13 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// This class manages the entire upgrade character screen. It will allow, and control units getting upgraded.
+/// It will also control the UI and update it accordingly.
+/// </summary>
 public class UpgradeManager : MonoBehaviour
 {
     public Button buttonCharles;
@@ -31,11 +35,18 @@ public class UpgradeManager : MonoBehaviour
         UpdateDamageText();
     }
 
+    /// <summary>
+    /// Updates the upgrade available UI text
+    /// </summary>
     void UpdateUpgradeText()
     {
         textAvailUpgrades.text = "Upgrades Available: " + GameManager.NumberUpgradesAvailable.ToString();
     }
 
+    /// <summary>
+    /// Set all upgrade buttons interactable status
+    /// </summary>
+    /// <param name="value"></param>
     void SetButtonsInteractable(bool value)
     {
         buttonCharles.interactable = value;
@@ -44,6 +55,10 @@ public class UpgradeManager : MonoBehaviour
         buttonSam.interactable = value;
     }
 
+    /// <summary>
+    /// Apply the damage increase when characters are upgraded. Also, adjust UI when not eligible for upgrading.
+    /// </summary>
+    /// <param name="buttonNumber"></param>
     public void DoUpgradeUnit(int buttonNumber)
     {
         switch (buttonNumber)
@@ -80,6 +95,9 @@ public class UpgradeManager : MonoBehaviour
         UpdateDamageText();
     }
 
+    /// <summary>
+    /// Update the UI when upgrading damage
+    /// </summary>
     void UpdateDamageText()
     {
         var heroCharles = GameManager.GetPlayerCharacter(GameManager.Heroes.Charles).GetComponent<Hero>();

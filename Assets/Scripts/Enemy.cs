@@ -12,6 +12,13 @@ public class Enemy : Character
         CustomUpdate();
     }
 
+    /// <summary>
+    /// Easily set attributes for this enemy
+    /// </summary>
+    /// <param name="attack"></param>
+    /// <param name="health"></param>
+    /// <param name="speed"></param>
+    /// <param name="hpPosition"></param>
     public void SetAttributes(int attack, int health, int speed, Vector3 hpPosition)
     {
         Attack = attack;

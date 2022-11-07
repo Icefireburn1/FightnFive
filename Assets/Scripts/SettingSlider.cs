@@ -1,8 +1,12 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// This is a helper class for a "slider" object. When the player changes the slider, the game volume
+/// will adjust automatically.
+/// </summary>
 public class SettingSlider : MonoBehaviour
 {
     public SoundManager sm;

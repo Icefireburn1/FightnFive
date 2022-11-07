@@ -1,9 +1,14 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// This class manages our sound manager. This object is persistent between scenes since it will
+/// stop scenarios where scene transitions will cause audio to stop abruptly. This is referenced
+/// from a lot of objects for creating sounds.
+/// </summary>
 [RequireComponent(typeof(AudioSource))]
 public class SoundManager : MonoBehaviour
 {
@@ -31,12 +36,19 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set if sound muted
+    /// </summary>
+    /// <param name="value"></param>
     public void SetMute(bool value)
     {
         isMute = value;
         audioSource.mute = value;
     }
 
+    /// <summary>
+    /// Our scenes for deciding which music to use
+    /// </summary>
     public enum SceneNames
     {
         MainMenu = 0,
@@ -60,6 +72,7 @@ public class SoundManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
+    // Called before start methods
     private void Awake()
     {
         // We don't want duplicates of this object
@@ -70,16 +83,28 @@ public class SoundManager : MonoBehaviour
         audioSource = gameObject.GetComponent<AudioSource>();
     }
 
+    /// <summary>
+    /// Play a single sound one time
+    /// </summary>
+    /// <param name="clip"></param>
     public void PlayOneShot(AudioClip clip)
     {
         audioSource.PlayOneShot(clip);
     }
 
+    /// <summary>
+    /// Play the death sound once
+    /// </summary>
     public void PlayOneShotDeath()
     {
         audioSource.PlayOneShot(deathClip);
     }
 
+    /// <summary>
+    /// When a scene loads, play the music that corresponds with that stage
+    /// </summary>
+    /// <param name="scene"></param>
+    /// <param name="mode"></param>
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         switch (scene.buildIndex)

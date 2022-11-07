@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -37,6 +37,9 @@ public class GameBoardManager : MonoBehaviour
         LoadButtons();
     }
 
+    /// <summary>
+    /// Load the correct text and color for each Floor button
+    /// </summary>
     void LoadButtons()
     {
         if (button1 != null || button2 != null || button3 != null || button4 != null || button5 != null)
@@ -66,6 +69,11 @@ public class GameBoardManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set color and intractability based on floor number and the player's cleared floors
+    /// </summary>
+    /// <param name="go"></param>
+    /// <param name="buttonNumber"></param>
     void SetButtonAttributes(Button go, int buttonNumber)
     {
         int num = (buttonNumber + ((GameManager.Chapter - 1) * 5));
@@ -91,6 +99,10 @@ public class GameBoardManager : MonoBehaviour
         return currentFloor;
     }
 
+    /// <summary>
+    /// When clicked, change scene to the battle scene at that floor
+    /// </summary>
+    /// <param name="buttonNumber"></param>
     public void GotoBattleFloor(int buttonNumber)
     {
         currentFloor = floors[(buttonNumber + ((GameManager.Chapter - 1) * 5)) - 1];
@@ -99,6 +111,9 @@ public class GameBoardManager : MonoBehaviour
         SceneManager.LoadScene(2); // go to battle
     }
 
+    /// <summary>
+    /// Go to next chapter. This will change which floors the player will see
+    /// </summary>
     public void GotoNextChapter()
     {
         if (GameManager.Chapter < 3)
@@ -108,6 +123,9 @@ public class GameBoardManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Go to previous chapter. This will change which floors the player will see
+    /// </summary>
     public void GotoPrevChapter()
     {
         if (GameManager.Chapter > 1)
