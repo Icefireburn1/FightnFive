@@ -1,5 +1,5 @@
 ![image](https://user-images.githubusercontent.com/3673861/200207791-c0b5b85d-ce3b-4db3-9796-7fe6905531e9.png)
-Senior Project by Justin Gewecke to make a small videogame.
+# Senior Project by Justin Gewecke to make a small videogame.
 
 # Guide
 Everything under Assets-> Scripts is my custom code.
